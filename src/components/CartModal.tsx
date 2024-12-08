@@ -64,7 +64,7 @@ export function CartSidebar({
                   <div className="flex items-start justify-between">
                     <div>
                       <h3 className="text-sm font-medium">{item.name}</h3>
-                      <p className="mt-1 text-sm text-[#9F9F9F]">1 × Rs. {item.price.toLocaleString()}</p>
+                      <p className="mt-1 text-sm text-[#9F9F9F]">1 x Rs. {item.price.toLocaleString()}</p>
                     </div>
                     <button className="text-gray-400 hover:text-gray-500">
                       <X className="h-4 w-4" />
@@ -81,7 +81,7 @@ export function CartSidebar({
             <p>Subtotal</p>
             <p>Rs. {(500000.00).toLocaleString()}</p>
           </div>
-          <div className="mt-6 flex justify-between gap-x-5 items-center">
+          <div className="mt-4 flex justify-between gap-x-3 md:gap-x-5 items-center">
             <Button 
               asChild
               variant="outline"
