@@ -1,8 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Search, User, Calendar, Tag, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Search, User, Calendar, Tag} from 'lucide-react'
 
 const blogPosts = [
   {

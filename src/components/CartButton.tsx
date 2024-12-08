@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { ShoppingCart } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { CartSidebar } from "./CartModal"
 import Image from "next/image"

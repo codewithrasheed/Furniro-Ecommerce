@@ -2,9 +2,7 @@
 import React from 'react'
 import Support from '@/components/Support'
 import PageBanner from '@/components/PageBanner'
-import ProductProvider from '@/context/ProductProvider'
 import ShopProducts from '@/components/ShopProducts'
-import Image from 'next/image'
 import ShopFilter from '@/components/ShopFilter'
 
 const products = [

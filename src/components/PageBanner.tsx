@@ -1,5 +1,5 @@
 import React from 'react'
-import BannerImg from "@/../public/Banner.png";
+import BannerImg from "@/../public/banner.png";
 import Image from 'next/image'
 
 const PageBanner = ({title, desc}: any) => {

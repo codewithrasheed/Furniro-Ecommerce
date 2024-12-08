@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Whishlist from "@/../public/whishlist.png";
-import Cart from "@/../public/cart.png";
 import User from "@/../public/user.png";
 import Search from "@/../public/search.png";
 import Logo from "@/../public/logo.png";
@@ -20,12 +19,6 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
-  // Cart Configuration
-  const [showcart, setShowCart] = useState(false);
-  const openCart = () => {
-    setShowCart(!showcart);
-    console.log(showcart);
-  };
 
   return (
     <>

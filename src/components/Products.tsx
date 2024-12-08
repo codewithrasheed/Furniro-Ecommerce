@@ -1,6 +1,4 @@
 "use client";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
 import ShopProducts from "@/components/ShopProducts";
 import Link from "next/link";
 
