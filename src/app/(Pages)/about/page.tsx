@@ -2,6 +2,7 @@ import React from 'react'
 import PageBanner from '@/components/PageBanner'
 import { Trophy, Users2, Clock, BadgeCheck } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const About = () => {
   return (
@@ -88,31 +89,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* Team Section */}
-      {/* <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Our Team</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              "/team-member-1.jpeg",
-            ].map((member) => (
-              <div key={member} className="text-center">
-                <div className="relative h-[300px] mb-4 rounded-lg overflow-hidden">
-                  <Image
-                    src={`${member}`}
-                    alt={`Team Member`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <h3 className="text-xl font-semibold mb-1">Jessica Brown</h3>
-                <p className="text-[#9F9F9F]">Designer</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section> */}
-        
         <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12">Our Team</h2>
@@ -171,6 +147,13 @@ const About = () => {
           </div>
         </div>
       </section>
+=======
+        <div className="container mx-auto px-4 md:px-0 py-10 mt-10">
+          <h1 className='text-center text-4xl font-bold mb-10'>Template is not Provided for this Page</h1>
+          <Link href={'/blog'} className='flex justify-center'>
+          <button className='bg-[#B88E2F] text-white px-8 py-3 text-center hover:bg-[#B88E2F]'>Go to Blog Page</button>
+          </Link>
+        </div>
     </>
   )
 }

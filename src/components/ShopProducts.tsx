@@ -1,6 +1,6 @@
 'use client'
 import Image from 'next/image'
-import { Info, ArrowLeftRight, Heart } from 'lucide-react'
+import {  ArrowLeftRight, Heart } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import Link from 'next/link'
 import label from '@/../public/Label1.png'
@@ -15,7 +15,7 @@ interface ProductCardProps {
 }
 
 
-export default function ShopProducts({ productImage, title, category, price, slug, _id }: ProductCardProps) {
+export default function ShopProducts({ productImage, title, category, price, slug, _id }: Readonly<ProductCardProps>) {
   const [like, setLike] = useState(false);
   return (
     <div key={_id} className="bg-[#F4F5F7] rounded-lg overflow-hidden group relative">

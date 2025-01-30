@@ -27,6 +27,7 @@ const Shop = () => {
     fetchProducts()
   }, [])
   
+
   return (
     <>
       <PageBanner title={"Shop"} desc={"Home > Shop"} />
@@ -45,8 +46,7 @@ const Shop = () => {
         )}
       </div>
   )
-      }1
-
+      }
     </div>
       <div>
       <ul className="flex space-x-5 justify-center font-[sans-serif]">

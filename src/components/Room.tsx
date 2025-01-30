@@ -17,7 +17,7 @@ const RoomsPage = () => {
             </div>
             <div>
                 <a
-                href="#"
+                href="/shop"
                 aria-label=""
                 className="inline-flex items-center font-semibold bg-[#B88E2F] text-white px-6 py-3 text-[16px]"
               >
