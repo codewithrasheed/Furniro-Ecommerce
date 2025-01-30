@@ -41,7 +41,7 @@ export default function RootLayout({
         {children}
         <Footer />
       </body>
-      <Script>
+      <Script id="snipcart">
         {`
            window.SnipcartSettings = {
             publicApiKey: "NDk3MzJkNDQtZTMyOS00NDFlLWFkMGEtZTBjN2RkYTJkOTJmNjM4NzE2NDkyNzAzMDcxNjE4",

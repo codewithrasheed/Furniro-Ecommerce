@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import sofa1 from "@/../public/sofa 1.png";
 import sofa2 from "@/../public/sofa2.png";
 import sofa3 from "@/../public/sofa3.png";
