@@ -179,7 +179,7 @@ const Header = () => {
             </ul>
           </div>
           {/* Icons */}
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center space-x-14 md:space-x-8">
             <Link href="/">
               <Image src={User} width={24} alt="User" />
             </Link>
