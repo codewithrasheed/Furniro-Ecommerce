@@ -59,6 +59,7 @@ const Shop = () => {
     }
     else if (value === "Default") {
       setFilterProducts(product);
+      return;
     }
     setFilterProducts(sortedProducts);
   };
