@@ -88,6 +88,7 @@ const Header = () => {
                 </button>
 
                 {/* Mobile Header */}
+
                 <ul className="space-y-4 p-6 pt-16">
                   <li>
                     <Link
@@ -135,6 +136,23 @@ const Header = () => {
                     </Link>
                   </li>
                 </ul>
+                <div className="flex items-center gap-4 relative mt-5 px-5">
+                  <form onSubmit={handleSearch} className="relative">
+                    <input
+                      type="text"
+                      placeholder="Search"
+                      className="md:w-[200px] w-[200px] md:h-[40px] px-5 py-2 rounded-lg border-1 border-black"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                    />
+                    <button
+                      type="submit"
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2"
+                    >
+                      <Image src={Search} width={15} alt="Search" />
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           )}
@@ -189,7 +207,6 @@ const Header = () => {
           </div>
           {/* Icons */}
           <div className="flex items-center space-x-10 md:space-x-8">
-
             <div className="hidden md:flex items-center gap-4 relative">
               <form onSubmit={handleSearch} className="relative">
                 <input
