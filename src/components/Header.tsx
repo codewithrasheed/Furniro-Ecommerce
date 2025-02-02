@@ -93,7 +93,7 @@ const Header = () => {
                   <li>
                     <Link
                       href="/"
-                      className="text-black block font-semibold text-[15px] hover:text-gray-600"
+                      className="text-gray-500 block font-semibold text-[15px] hover:text-gray-600"
                       onClick={closeMobileMenu}
                     >
                       Home
@@ -102,7 +102,7 @@ const Header = () => {
                   <li>
                     <Link
                       href="/shop"
-                      className="text-black block font-semibold text-[15px] hover:text-gray-600"
+                      className="text-gray-500 block font-semibold text-[15px] hover:text-gray-600"
                       onClick={closeMobileMenu}
                     >
                       Shop
@@ -111,7 +111,7 @@ const Header = () => {
                   <li>
                     <Link
                       href="/about"
-                      className="text-black block font-semibold text-[15px] hover:text-gray-600"
+                      className="text-gray-500 block font-semibold text-[15px] hover:text-gray-600"
                       onClick={closeMobileMenu}
                     >
                       About
@@ -120,7 +120,7 @@ const Header = () => {
                   <li>
                     <Link
                       href="/contact"
-                      className="text-black block font-semibold text-[15px] hover:text-gray-600"
+                      className="text-gray-500 block font-semibold text-[15px] hover:text-gray-600"
                       onClick={closeMobileMenu}
                     >
                       Contact
@@ -129,19 +129,19 @@ const Header = () => {
                   <li>
                     <Link
                       href="/blog"
-                      className="text-black block font-semibold text-[15px] hover:text-gray-600"
+                      className="text-gray-500 block font-semibold text-[15px] hover:text-gray-600"
                       onClick={closeMobileMenu}
                     >
                       Blog
                     </Link>
                   </li>
                 </ul>
-                <div className="flex items-center gap-4 relative mt-5 px-5">
+                <div className="flex items-center gap-4 relative px-5">
                   <form onSubmit={handleSearch} className="relative">
                     <input
                       type="text"
                       placeholder="Search"
-                      className="md:w-[200px] w-[200px] md:h-[40px] px-5 py-2 rounded-lg border-1 border-black"
+                      className="md:w-[200px] w-[200px] md:h-[40px] px-5 py-2 rounded-lg border-2 focus:outline-black border-gray-300 shadow-md"
                       value={query}
                       onChange={(e) => setQuery(e.target.value)}
                     />
