@@ -9,11 +9,17 @@ import Link from "next/link";
 import { getHomeProducts, getProducts } from "@/sanity/sanity.query";
 import { useParams } from "next/navigation";
 import ShopProducts from "@/components/ShopProducts";
+import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/hooks/useCart";
+
 
 const ProductDetail = () => {
+  const { toast } = useToast()
+  const {addToCart} = useCart()
   const [product, setProduct] = useState<any>([]);
   const [relatedProduct, setRelatedProduct] = useState<any>([]);
-   useEffect(() => {
+   
+  useEffect(() => {
       async function fetchProducts() {
         try {
           const fetchedProducts = await getProducts()
@@ -33,13 +39,13 @@ const ProductDetail = () => {
       }
       relatedProducts()
     }, [])
-    
     const url = useParams()
+    
+
   return (
     <>
-
     {product.filter((products: any) => products.slug === url.slug).map((product: any) =>(
-      <>
+      <div key={product._id}>
       <div className="bg-[#F9F1E7] w-full h-auto px-4 sm:px-20 mb-5">
         <p className="py-4 sm:py-7 text-sm sm:text-base text-[#9F9F9F]">
           Home &nbsp;<span className="text-black">&gt;</span>&nbsp; Shop &nbsp;
@@ -121,15 +127,13 @@ const ProductDetail = () => {
                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-x-5 w-full sm:w-[500px]">
                   <button
                     type="button"
-                    className="w-full sm:w-[230px] h-[64px] mt-8 py-3 bg-transparent border border-[#000] text-xl font-semibold rounded-xl snipcart-add-item"
-                    data-item-id={product._id}
-                    data-item-price={product.price}
-                    data-item-image={product.productImage}
-                    data-item-name={product.title}
-                    data-item-description={product.description}
-                    data-item-url={`/shop/${product.slug}`}
-                    data-currency="Rs"
-                  >
+                    onClick={() => {
+                      toast({
+                        description: "Product added to cart Successfully.",
+                        duration: 3000, // 3 seconds
+                      })
+                      addToCart(product)}}
+                    className="w-full sm:w-[230px] h-[64px] mt-8 py-3 bg-transparent border border-[#000] text-xl font-semibold rounded-xl snipcart-add-item">
                     Add To Cart
                   </button>
                   <Link href={"/comparison"} className="w-full sm:w-auto">
@@ -205,7 +209,7 @@ const ProductDetail = () => {
             </Link>
           </div>
         </div>
-        </>
+        </div>
     ))}
   </>
 );

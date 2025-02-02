@@ -7,10 +7,13 @@ import User from "@/../public/user.png";
 import Search from "@/../public/search.png";
 import Logo from "@/../public/logo.png";
 import { CartButton } from "./CartButton";
+import { useRouter } from "next/navigation";
 
 const Header = () => {
   // Mobile View Navbar Configuration
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const router = useRouter();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -19,7 +22,13 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
-
+  const handleSearch = (e: any) => {
+    e.preventDefault();
+    if (query.trim()) {
+      router.push(`/shop?search=${encodeURIComponent(query)}`);
+    }
+    setQuery("");
+  };
   return (
     <>
       {/* Header Open */}
@@ -179,13 +188,30 @@ const Header = () => {
             </ul>
           </div>
           {/* Icons */}
-          <div className="flex items-center space-x-14 md:space-x-8">
+          <div className="flex items-center space-x-10 md:space-x-8">
+
+            <div className="hidden md:flex items-center gap-4 relative">
+              <form onSubmit={handleSearch} className="relative">
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="md:w-[200px] md:h-[40px] px-5 py-2 rounded-lg border-1 border-black"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                <button
+                  type="submit"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2"
+                >
+                  <Image src={Search} width={15} alt="Search" />
+                </button>
+              </form>
+            </div>
+
             <Link href="/">
               <Image src={User} width={24} alt="User" />
             </Link>
-            <Link href="">
-              <Image src={Search} width={24} alt="User" />
-            </Link>
+
             <Link href="/">
               <Image src={Whishlist} width={24} alt="Whishlist" />
             </Link>
@@ -193,7 +219,7 @@ const Header = () => {
           </div>
         </div>
       </header>
-      
+
       {/* Header Close */}
     </>
   );
