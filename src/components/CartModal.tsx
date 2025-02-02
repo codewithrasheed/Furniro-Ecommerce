@@ -50,7 +50,7 @@ export function CartSidebar({ open, onOpenChange }: Readonly<{ open: boolean; on
             <p>Subtotal</p>
             <p>Rs. {cart.reduce((total, item) => total + item.price, 0).toLocaleString()}</p>
           </div>
-          <div className="mt-2 md:mt-4 flex justify-center md:justify-between gap-x-3 md:gap-x-5 items-center">
+          <div className="md:mt-4 flex justify-center md:justify-between gap-x-3 md:gap-x-5 items-center">
             <Button asChild variant="outline" className="border-[#000] w-[87px] h-[30px] text-black rounded-full">
               <Link href="/cart">Cart</Link>
             </Button>
