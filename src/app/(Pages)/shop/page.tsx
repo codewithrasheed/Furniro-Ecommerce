@@ -51,7 +51,7 @@ const Shop = () => {
     const value = e.target.value;
     setSortOptions(value);
 
-    let sortedProducts = [...product];
+    const sortedProducts = [...product];
     if (value === "Price: Low to High") {
       sortedProducts.sort((a, b) => a.price - b.price);
     } else if (value === "Price: High to Low") {
