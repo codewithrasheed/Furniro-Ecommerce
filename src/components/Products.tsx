@@ -10,7 +10,6 @@ const Products = () => {
       async function AllProducts() {
         const products = await getHomeProducts()
         setProduct(products)
-        console.log(products)
       }
       AllProducts()
     }, [])
