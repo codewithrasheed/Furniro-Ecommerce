@@ -30,7 +30,7 @@ export function CartSidebar({ open, onOpenChange }: Readonly<{ open: boolean; on
                     <div className="flex items-start justify-between">
                       <div>
                         <h3 className="text-sm font-medium">{item.title}</h3>
-                        <p className="mt-1 text-sm text-[#9F9F9F]">1 x Rs. {item.price.toLocaleString()}</p>
+                        <p className="mt-1 text-sm text-[#9F9F9F]">1 x Rs. {item.price}</p>
                       </div>
                       <button onClick={() => removeFromCart(item._id)} className="text-gray-400 hover:text-gray-500">
                         <X className="h-4 w-4" />

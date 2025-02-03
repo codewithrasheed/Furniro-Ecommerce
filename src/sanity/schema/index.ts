@@ -1,3 +1,3 @@
 import { product } from "./product";
-
-export const schemaTypes = [product];
+import { order} from "./order";
+export const schemaTypes = [product, order];

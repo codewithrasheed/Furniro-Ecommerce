@@ -212,7 +212,7 @@ const Header = () => {
                 <input
                   type="text"
                   placeholder="Search"
-                  className="md:w-[230px] md:h-[40px] px-5 py-2 rounded-lg border-1 border-gray-300 shadow-md"
+                  className="md:w-[230px] md:h-[40px] px-5 py-2 rounded-3xl border-1 border-gray-300 shadow-small"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />

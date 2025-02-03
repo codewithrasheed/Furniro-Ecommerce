@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button"
 import Link from 'next/link'
 import label from '@/../public/Label1.png'
 import { useState } from 'react'
+import { useCart } from '@/hooks/useCart'
+import { useToast } from '@/hooks/use-toast'
 interface ProductCardProps {
   productImage: string
   title: string
@@ -17,6 +19,18 @@ interface ProductCardProps {
 
 export default function ShopProducts({ productImage, title, category, price, slug, _id }: Readonly<ProductCardProps>) {
   const [like, setLike] = useState(false);
+  const {addToCart} = useCart()
+  const {toast} = useToast()
+const product = {
+    productImage: productImage,
+    title: title,
+    category: category,
+    price: price,
+    slug: slug,
+    _id: _id
+  }
+
+
   return (
     <div key={_id} className="bg-[#F4F5F7] rounded-lg overflow-hidden group relative">
       <div className="relative h-64 overflow-hidden">
@@ -38,12 +52,17 @@ export default function ShopProducts({ productImage, title, category, price, slu
         </Button>
           </Link>
         <div className="flex items-center gap-6 text-white text-sm">
-          <Link href={"/comparison"}>
-          <Button  className="flex items-center gap-1 hover:text-white/90 transition-colors">
+          <Button 
+          onClick={() => {
+            toast({
+              description: "Product added to cart Successfully.",
+              duration: 3000, // 3 seconds
+            })
+            addToCart(product)}}
+          className="flex items-center gap-1 hover:text-white/90 transition-colors">
             <ArrowLeftRight className="w-4 h-4" />
-            Compare
+            Add To Cart
           </Button>
-          </Link>
           <button onClick={()=>{
               setLike(!like)
             }} className="flex items-center gap-1 hover:text-white/90 transition-colors">

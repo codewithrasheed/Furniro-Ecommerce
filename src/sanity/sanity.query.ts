@@ -40,3 +40,28 @@ export async function getHomeProducts() {
         `
     )
 }
+
+export async function getOrders() {
+    return sanityClient.fetch(
+        groq `
+        *[_type == "order"]{
+        _id,
+        firstName,
+        lastName,
+        company,
+        country,
+        address,
+        city,
+        province,
+        zipCode,
+        phone,
+        email,
+        "cartItem": cartItems[]->{title, price, quantity},
+        total,
+        orderStatus,
+        orderDate
+        }
+        `
+    )
+}
+

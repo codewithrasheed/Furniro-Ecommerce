@@ -3,12 +3,9 @@
 @tailwind utilities;
 
 body {
-  font-family: var(--font-poppins);
+  font-family: var(--font-lato);
 }
 
-/* .product-detai{
-  background-image: url('/Rectangle 38.png');
-} */
 
 @layer base {
   :root {

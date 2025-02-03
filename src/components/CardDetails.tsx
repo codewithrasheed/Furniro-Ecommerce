@@ -1,14 +1,35 @@
 'use client';
 import React, { useState} from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { useCart } from "@/hooks/useCart";
-
+import Swal from 'sweetalert2'
+import { useRouter } from "next/navigation";
 const CartDetails = () => {
   const { cart, removeFromCart } = useCart(); 
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+  const router = useRouter();
 
-
+  const handleCheckout = async () => {
+    await Swal.fire({
+      title: "Do you want to Proceed?",
+      text: "Processing Your Order please Wait a moment",
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, Proceed!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Success!",
+          text: "Your Order has been successfully processed!.",
+          icon: "success"
+        });
+        router.push("/checkout");
+      }
+    });
+    
+  }
 
   const handleQuantityChange = (id: string, value: number) => {
     setQuantities((prev: any) => ({
@@ -136,9 +157,9 @@ const CartDetails = () => {
               </div>
             </div>
             <div className="flex justify-center mt-8">
-              <Link href="/checkout" className="inline-block border border-black text-center py-3 px-8 rounded-lg hover:bg-black hover:text-white transition-colors">
+              <button onClick={handleCheckout} className="inline-block border border-black text-center py-3 px-8 rounded-lg hover:bg-black hover:text-white transition-colors">
                 Check Out
-              </Link>
+              </button>
             </div>
           </div>
         </div>
