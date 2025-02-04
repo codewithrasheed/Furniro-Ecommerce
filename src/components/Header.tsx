@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Whishlist from "@/../public/whishlist.png";
@@ -7,14 +7,17 @@ import User from "@/../public/user.png";
 import Search from "@/../public/search.png";
 import Logo from "@/../public/logo.png";
 import { CartButton } from "./CartButton";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const Header = () => {
   // Mobile View Navbar Configuration
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const router = useRouter();
+  const pathname = usePathname();
 
+  const { data: session } = useSession();
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
@@ -22,12 +25,17 @@ const Header = () => {
     setIsMobileMenuOpen(false);
   };
 
+  useEffect(() => {
+    closeMobileMenu();
+  }, [pathname]);
+
   const handleSearch = (e: any) => {
     e.preventDefault();
     if (query.trim()) {
       router.push(`/shop?search=${encodeURIComponent(query)}`);
     }
     setQuery("");
+    closeMobileMenu();
   };
   return (
     <>
@@ -224,10 +232,23 @@ const Header = () => {
                 </button>
               </form>
             </div>
-
-            <Link href="/login">
-              <Image src={User} width={24} alt="User" />
-            </Link>
+            {session ? (
+              <div className="flex items-center gap-4">
+                <Link href="/profile">
+                  <Image
+                    src={session?.user?.image ? session?.user?.image : User}
+                    className="rounded-full"
+                    width={24}
+                    height={24}
+                    alt="User"
+                  />
+                </Link>
+              </div>
+            ) : (
+              <Link href="/login">
+                <Image src={User} width={24} alt="User" />
+              </Link>
+            )}
 
             <Link href="/">
               <Image src={Whishlist} width={24} alt="Whishlist" />

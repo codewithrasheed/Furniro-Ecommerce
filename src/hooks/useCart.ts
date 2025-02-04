@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 // Custom Hook to manage cart state
 export const useCart = () => {
   const [cart, setCart] = useState<any[]>([]);
+  const [order, setOrder] = useState<any[]>([]);
 
   // Function to load cart from localStorage
   const loadCart = () => {
@@ -11,13 +12,20 @@ export const useCart = () => {
     setCart(storedCart);
   };
 
+  const loadOrder = () => {
+    const storedOrder = JSON.parse(localStorage.getItem("order") ?? "[]");
+    setOrder(storedOrder);
+  }
+
   // Load cart when component mounts
   useEffect(() => {
     loadCart();
+    loadOrder();
 
     // Listen for localStorage changes
-    const handleStorageChange = () => {
+    const handleStorageChange: any = () => {
       loadCart();
+      loadOrder();
     };
 
     window.addEventListener("storage", handleStorageChange);
@@ -47,5 +55,22 @@ export const useCart = () => {
     window.dispatchEvent(new Event("storage"));
   };
 
-  return { cart, addToCart, removeFromCart };
+    // Function to remove cart data
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem("cart");
+
+    // Dispatch event to update all components
+    window.dispatchEvent(new Event("storage"));
+  };
+    // Function to remove order 
+  const clearOrder = () => {
+    setOrder([]);
+    localStorage.removeItem("order");
+
+    // Dispatch event to update all components
+    window.dispatchEvent(new Event("storage"));
+  };
+
+  return { cart, addToCart, removeFromCart, clearCart, order, clearOrder};
 };

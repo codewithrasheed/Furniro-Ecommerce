@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,7 +18,16 @@ import Swal from "sweetalert2";
 import sanityClient from "@/sanity/sanity.client";
 import { useRouter } from "next/navigation";
 import { nanoid } from "nanoid";
+import { useSession } from "next-auth/react";
 export default function BillingDetails() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+  useEffect(() => {
+    if (status === "unauthenticated") {
+        router.push("/login"); // Redirect if not logged in
+    }
+}, [status, router]);
+
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [companyName, setCompanyName] = useState("");
@@ -35,7 +44,7 @@ export default function BillingDetails() {
   const subtotal = cart.reduce((total, item) => total + item.price, 0);
   const deliveryFee = subtotal >= 1500 ? 0 : 500;
   const total = subtotal + deliveryFee;
-  const router = useRouter();
+  
   const handleProceed = async (e: any) => {
     e.preventDefault();
     await Swal.fire({

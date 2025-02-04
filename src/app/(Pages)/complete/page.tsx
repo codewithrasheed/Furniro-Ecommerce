@@ -1,28 +1,19 @@
 "use client";
+import { useCart } from "@/hooks/useCart";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React from "react";
 const Complete = () => {
-  const [orderData, setOrderData] = useState<any[]>([]);
-  const [cartData, setCartData] = useState<any[]>([]);
-  const router = useRouter()
-  useEffect(() => {
-      if (typeof window !== "undefined") {
-          const storedOrder = localStorage.getItem("order");
-          setOrderData(storedOrder ? JSON.parse(storedOrder) : null);
-      }
-      if (typeof window !== "undefined") {
-          const storedCart = localStorage.getItem("cart");
-          setCartData(storedCart ? JSON.parse(storedCart) : null);
-      }
-  }, []);
+  const { cart, order, clearCart, clearOrder } = useCart();
+  const router = useRouter();
+
 
   const continueShopping = () => {
-    localStorage.removeItem("cart");
-    localStorage.removeItem("order");
+    clearCart();
+    clearOrder();
     router.push("/shop");
-  }
- 
+  };
+
   return (
     <div>
       <div>
@@ -56,7 +47,7 @@ const Complete = () => {
               <p>Shipping Address:</p>
             </div>
             <div className="">
-            {orderData?.map((item: any) => (
+              {order?.map((item: any) => (
                 <div key={item._id}>
                   <p>#{item.orderNumber}</p>
                   <p>{item.orderDate}</p>
@@ -69,10 +60,17 @@ const Complete = () => {
           </div>
           <div className="flex justify-center gap-5 items-center shadow-lg p-8">
             <div className="">
-          <h1 className="text-2xl font-bold text-center mb-5">Product Summary</h1>
-            {cartData?.map((item: any) => (
+              <h1 className="text-2xl font-bold text-center mb-5">
+                Product Summary
+              </h1>
+              {cart?.map((item: any) => (
                 <div className="flex gap-5 items-center mb-5" key={item._id}>
-                  <Image src={item.productImage} alt="Product" width={80} height={50} />
+                  <Image
+                    src={item.productImage}
+                    alt="Product"
+                    width={80}
+                    height={50}
+                  />
                   <p>{item.title}</p>
                   <p>Rs {item.price}</p>
                 </div>

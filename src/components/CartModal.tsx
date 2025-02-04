@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { X } from "lucide-react";
@@ -8,10 +8,15 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useCart } from "@/hooks/useCart"; // Import the custom hook
+import { usePathname } from "next/navigation";
 
 export function CartSidebar({ open, onOpenChange }: Readonly<{ open: boolean; onOpenChange: (open: boolean) => void }>) {
+  const pathname = usePathname();
   const { cart, removeFromCart } = useCart(); // Get cart data & remove function
 
+  useEffect(() => {
+    onOpenChange(false);
+  }, [pathname, onOpenChange]);
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="w-full sm:max-w-[420px] pr-0">
@@ -45,20 +50,17 @@ export function CartSidebar({ open, onOpenChange }: Readonly<{ open: boolean; on
             )}
           </div>
         </ScrollArea>
-        <div className="border-t px-6 py-6">
+        <div className="border-t px-6 py-5">
           <div className="flex justify-between text-base font-medium text-gray-900 mb-4">
             <p>Subtotal</p>
             <p>Rs. {cart.reduce((total, item) => total + item.price, 0).toLocaleString()}</p>
           </div>
-          <div className="md:mt-4 flex justify-center md:justify-between gap-x-3 md:gap-x-5 items-center">
+          <div className="md:mt-4 mt-0 flex justify-center md:justify-between gap-x-3 md:gap-x-5 items-center">
             <Button asChild variant="outline" className="border-[#000] w-[87px] h-[30px] text-black rounded-full">
               <Link href="/cart">Cart</Link>
             </Button>
             <Button asChild variant="outline" className=" border-[#000] w-[118px] h-[30px] text-black rounded-full">
               <Link href="/checkout">Checkout</Link>
-            </Button>
-            <Button asChild variant="outline" className=" border-[#000] w-[135px] h-[30px] text-black rounded-full">
-              <Link href="/comparison">Comparison</Link>
             </Button>
           </div>
         </div>
