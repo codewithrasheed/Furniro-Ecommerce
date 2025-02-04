@@ -1,12 +1,18 @@
 "use client";
 import { useCart } from "@/hooks/useCart";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 const Complete = () => {
   const { cart, order, clearCart, clearOrder } = useCart();
   const router = useRouter();
-
+  const {data: session, status}= useSession();
+  useEffect(()=> {
+    if(status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
 
   const continueShopping = () => {
     clearCart();
