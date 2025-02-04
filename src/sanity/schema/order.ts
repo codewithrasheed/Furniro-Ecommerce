@@ -94,12 +94,17 @@ export const order = defineType({
                 ],
                 layout: "radio",
             },
-            initialValue: "Pending"
+            initialValue: "pending"
         },
         {
             name: 'orderDate',
             title: 'Order Date',
             type: 'datetime',
+        },
+        {
+            name: 'orderNumber',
+            title: 'Order Number',
+            type: 'number',
         }
 
     ]

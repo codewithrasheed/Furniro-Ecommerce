@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-
 const Confirmation = () => {
   const orderData = JSON.parse(localStorage.getItem("order") ?? "[]");
   return (
@@ -38,7 +37,7 @@ const Confirmation = () => {
             <div className="">
             {orderData.map((item: any) => (
                 <div key={item._id}>
-                  <p>{item._id ?? "098765432"}</p>
+                  <p>#{item.orderNumber}</p>
                   <p>{item.orderDate}</p>
                   <p>${item.total}</p>
                   <p>{item.paymentMethod ?? "Visa"}</p>

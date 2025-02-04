@@ -225,7 +225,7 @@ const Header = () => {
               </form>
             </div>
 
-            <Link href="/">
+            <Link href="/login">
               <Image src={User} width={24} alt="User" />
             </Link>
 

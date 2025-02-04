@@ -74,7 +74,9 @@ export default function BillingDetails() {
         _ref: item._id,
       })),
       total: total,
-      orderDate: new Date().getDate(),
+      orderStatus: "pending",
+      orderDate: new Date().toISOString(),
+      orderNumber: Math.round(Math.random() * 1000000),
     };
 
     try {

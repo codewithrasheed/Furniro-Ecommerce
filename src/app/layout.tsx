@@ -3,6 +3,7 @@ import "./globals.css";
 import { Lato } from "next/font/google";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { Toaster } from "@/components/ui/toaster";
+import { SessionProvider } from "next-auth/react";
 
 
 const lato = Lato({
@@ -30,10 +31,12 @@ export default function RootLayout({
       <body
         className={`${lato.className} antialiased`}
       >
+        <SessionProvider>
         <Toaster />
         <LayoutWrapper>
           {children}
         </LayoutWrapper>
+        </SessionProvider>
       </body>
     </html>
   );
