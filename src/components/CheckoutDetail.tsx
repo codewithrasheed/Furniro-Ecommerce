@@ -81,7 +81,6 @@ export default function BillingDetails() {
 
     try {
       await sanityClient.create(order);
-      localStorage.removeItem("cart");
       localStorage.setItem("order", JSON.stringify([order]));
     } catch (error) {
       console.log("Error Creating Order", error);
@@ -97,7 +96,7 @@ export default function BillingDetails() {
     setPhone("");
     setEmail("");
     setInfo("");
-    router.push("/confirmation");
+    router.push("/complete");
   };
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-8">

@@ -5,6 +5,7 @@ import CartDetails from "@/components/CardDetails";
 import Support from "@/components/Support";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { Spinner } from "@nextui-org/spinner";
 
 const Cart = () => {
   const { data: session, status } = useSession();
@@ -16,7 +17,7 @@ const Cart = () => {
       }
   }, [status, router]);
 
-  if (status === "loading") return <p>Loading...</p>;
+  if (status === "loading") return <Spinner size="lg" />;
   return (
     <>
       <PageBanner title={"Cart"} desc={"Home > Cart"} />
