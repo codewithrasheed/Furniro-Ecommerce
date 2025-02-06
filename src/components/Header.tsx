@@ -236,7 +236,7 @@ const Header = () => {
               <div className="flex items-center gap-4">
                 <Link href="/profile">
                   <Image
-                    src={session?.user?.image ? session?.user?.image : User}
+                    src={session?.user?.image ?? User}
                     className="rounded-full"
                     width={24}
                     height={24}

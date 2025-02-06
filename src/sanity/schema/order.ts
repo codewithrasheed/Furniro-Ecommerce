@@ -105,7 +105,13 @@ export const order = defineType({
             name: 'orderNumber',
             title: 'Order Number',
             type: 'number',
-        }
+        },
+        {
+            name: "customer",
+            title: "Customer",
+            type: "reference",
+            to: [{ type: "customer" }], // Reference to the 'customer' schema
+          },
 
     ]
 })

@@ -24,10 +24,9 @@ export default function BillingDetails() {
   const { data: session, status } = useSession();
   useEffect(() => {
     if (status === "unauthenticated") {
-        router.push("/login"); // Redirect if not logged in
+      router.push("/login"); // Redirect if not logged in
     }
-}, [status, router]);
-
+  }, [status, router]);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [companyName, setCompanyName] = useState("");
@@ -44,69 +43,298 @@ export default function BillingDetails() {
   const subtotal = cart.reduce((total, item) => total + item.price, 0);
   const deliveryFee = subtotal >= 1500 ? 0 : 500;
   const total = subtotal + deliveryFee;
-  
+
+  const formValid =
+    firstName &&
+    lastName &&
+    country &&
+    address &&
+    city &&
+    province &&
+    zipCode &&
+    phone &&
+    email;
   const handleProceed = async (e: any) => {
     e.preventDefault();
-    await Swal.fire({
+    if (!formValid) {
+      await Swal.fire({
+        title: "Error",
+        text: "Please fill all the fields",
+        icon: "error",
+      });
+      return;
+    }
+
+    if (cart === null || cart.length === 0) {
+      await Swal.fire({
+        title: "Cart is Empty",
+        text: "Please add items to cart to proceed",
+        icon: "error",
+      });
+      return;
+    }
+
+    const result = await Swal.fire({
       title: "Do you want to Proceed?",
-      text: "Processing Your Order please Wait a moment",
+      text: "Processing Your Order, please wait a moment",
       icon: "info",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, Proceed!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Success!",
-          text: "Your Order has been successfully processed!.",
-          icon: "success",
-        });
-      }
     });
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    // Check if the customer exists
+    let existingCustomer = await sanityClient.fetch(
+      `*[_type == "customer" && email == $email][0]`,
+      { email: session?.user?.email }
+    );
+
+    let customerId;
+
+    if (existingCustomer) {
+      customerId = existingCustomer._id; // Use existing customer's ID
+    } else {
+      // Create a new customer and get its valid document ID
+      const customer = await sanityClient.create({
+        _type: "customer",
+        name: session?.user?.name,
+        email: session?.user?.email,
+        image: session?.user?.image,
+        orders: [],
+      });
+      customerId = customer._id;
+    }
+
+    // Create the order
     const order = {
       _type: "order",
-      firstName: firstName,
-      lastName: lastName,
+      firstName,
+      lastName,
       company: companyName,
-      country: country,
-      address: address,
-      city: city,
-      province: province,
-      zipCode: zipCode,
-      phone: phone,
-      email: email,
-      info: info,
+      country,
+      address,
+      city,
+      province,
+      zipCode,
+      phone,
+      email,
+      info,
       cartItem: cart.map((item) => ({
         _key: nanoid(),
         _type: "reference",
         _ref: item._id,
       })),
-      total: total,
+      total,
       orderStatus: "pending",
       orderDate: new Date().toISOString(),
       orderNumber: Math.round(Math.random() * 1000000),
+      customer: {
+        _type: "reference",
+        _ref: customerId, // Now using a valid document ID
+      },
     };
 
     try {
-      await sanityClient.create(order);
+      // Save the order to Sanity
+      const createdOrder = await sanityClient.create(order);
       localStorage.setItem("order", JSON.stringify([order]));
+      console.log("Order created successfully:", createdOrder);
+
+      if (existingCustomer) {
+        // If the customer exists, update their orders array
+        await sanityClient
+          .patch(existingCustomer._id)
+          .setIfMissing({ orders: [] })
+          .append("orders", [
+            {
+              _key: nanoid(),
+              _type: "reference",
+              _ref: createdOrder._id,
+            },
+          ])
+          .commit();
+        console.log("Order added to existing customer:", existingCustomer);
+      } else {
+        // If the customer does not exist, create a new customer
+        const customer = {
+          _type: "customer",
+          name: session?.user?.name,
+          email: session?.user?.email,
+          image: session?.user?.image,
+          orders: [
+            {
+              _key: nanoid(),
+              _type: "reference",
+              _ref: createdOrder._id,
+            },
+          ],
+        };
+        const createdCustomer = await sanityClient.create(customer);
+        console.log("New customer created with order:", createdCustomer);
+      }
+
+      // Clear the form and cart
+      setFirstName("");
+      setLastName("");
+      setCompanyName("");
+      setCountry("");
+      setAddress("");
+      setCity("");
+      setProvince("");
+      setZipCode("");
+      setPhone("");
+      setEmail("");
+      setInfo("");
+
+      // Redirect to the complete page
+      router.push("/complete");
     } catch (error) {
-      console.log("Error Creating Order", error);
+      console.error("Error processing order:", error);
+      await Swal.fire({
+        title: "Error",
+        text: "An error occurred while processing your order.",
+        icon: "error",
+      });
     }
-    setFirstName("");
-    setLastName("");
-    setCompanyName("");
-    setCountry("");
-    setAddress("");
-    setCity("");
-    setProvince("");
-    setZipCode("");
-    setPhone("");
-    setEmail("");
-    setInfo("");
-    router.push("/complete");
   };
+
+  //   e.preventDefault();
+  //   if (!formValid) {
+  //     await Swal.fire({
+  //       title: "Error",
+  //       text: "Please fill all the fields",
+  //       icon: "error",
+  //     });
+  //     return;
+  //   }
+
+  //   if (cart === null || cart.length === 0) {
+  //     await Swal.fire({
+  //       title: "Cart is Empty",
+  //       text: "Please add items to cart to proceed",
+  //       icon: "error",
+  //     });
+  //     return;
+  //   }
+
+  //   const result = await Swal.fire({
+  //     title: "Do you want to Proceed?",
+  //     text: "Processing Your Order, please wait a moment",
+  //     icon: "info",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Yes, Proceed!",
+  //   });
+
+  //   if (!result.isConfirmed) {
+  //     return;
+  //   }
+
+  //   // Create the order
+  //   const order = {
+  //     _type: "order",
+  //     firstName: firstName,
+  //     lastName: lastName,
+  //     company: companyName,
+  //     country: country,
+  //     address: address,
+  //     city: city,
+  //     province: province,
+  //     zipCode: zipCode,
+  //     phone: phone,
+  //     email: email,
+  //     info: info,
+  //     cartItem: cart.map((item: any) => ({
+  //       _key: nanoid(),
+  //       _type: "reference",
+  //       _ref: item._id,
+  //     })),
+  //     total: total,
+  //     orderStatus: "pending",
+  //     orderDate: new Date().toISOString(),
+  //     orderNumber: Math.round(Math.random() * 1000000),
+  //     customer: {
+  //       _key: nanoid(),
+  //       _type: "reference",
+  //       _ref: session?.user?.email,
+  //     },
+  //   };
+
+  //   try {
+  //     // Save the order to Sanity
+  //     const createdOrder = await sanityClient.create(order);
+  //     localStorage.setItem("order", JSON.stringify([order]));
+  //     console.log("Order created successfully:", createdOrder);
+
+  //     // Check if the customer exists
+  //     const existingCustomer = await sanityClient.fetch(
+  //       `*[_type == "customer" && email == $email][0]`,
+  //       { email: session?.user?.email }
+  //     );
+
+  //     if (existingCustomer) {
+  //       // If the customer exists, update their orders array
+  //       await sanityClient
+  //         .patch(existingCustomer._id)
+  //         .setIfMissing({ orders: [] })
+  //         .append("orders", [
+  //           {
+  //             _key: nanoid(),
+  //             _type: "reference",
+  //             _ref: createdOrder._id,
+  //           },
+  //         ])
+  //         .commit();
+  //       console.log("Order added to existing customer:", existingCustomer);
+  //     } else {
+  //       // If the customer does not exist, create a new customer
+  //       const customer = {
+  //         _type: "customer",
+  //         name: session?.user?.name,
+  //         email: session?.user?.email,
+  //         image: session?.user?.image,
+  //         orders: [
+  //           {
+  //             _key: nanoid(),
+  //             _type: "reference",
+  //             _ref: createdOrder._id,
+  //           },
+  //         ],
+  //       };
+  //       await sanityClient.create(customer);
+  //       console.log("New customer created with order:", customer);
+  //     }
+
+  //     // Clear the form and cart
+  //     setFirstName("");
+  //     setLastName("");
+  //     setCompanyName("");
+  //     setCountry("");
+  //     setAddress("");
+  //     setCity("");
+  //     setProvince("");
+  //     setZipCode("");
+  //     setPhone("");
+  //     setEmail("");
+  //     setInfo("");
+
+  //     // Redirect to the complete page
+  //     router.push("/complete");
+  //   } catch (error) {
+  //     console.error("Error processing order:", error);
+  //     await Swal.fire({
+  //       title: "Error",
+  //       text: "An error occurred while processing your order.",
+  //       icon: "error",
+  //     });
+  //   }
+  // };
   return (
     <div className="mx-auto max-w-[1200px] px-4 py-8">
       <div className="grid gap-8 lg:grid-cols-2">
@@ -118,7 +346,6 @@ export default function BillingDetails() {
                 <Label htmlFor="firstName">First Name</Label>
                 <Input
                   id="firstName"
-                  required
                   className="w-full"
                   value={firstName}
                   onChange={(e) => {
@@ -130,7 +357,6 @@ export default function BillingDetails() {
                 <Label htmlFor="lastName">Last Name</Label>
                 <Input
                   id="lastName"
-                  required
                   className="w-full"
                   value={lastName}
                   onChange={(e) => {
@@ -162,14 +388,14 @@ export default function BillingDetails() {
                   <SelectValue placeholder="Select country" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="pk">Pakistan</SelectItem>
-                  <SelectItem value="us">United States</SelectItem>
-                  <SelectItem value="uk">United Kingdom</SelectItem>
-                  <SelectItem value="sa">South Africa</SelectItem>
-                  <SelectItem value="ca">Canada</SelectItem>
-                  <SelectItem value="my">Malaysia</SelectItem>
-                  <SelectItem value="zw">Zimbabwe</SelectItem>
-                  <SelectItem value="sg">Singhapore</SelectItem>
+                  <SelectItem value="Pakistan">Pakistan</SelectItem>
+                  <SelectItem value="United States">United States</SelectItem>
+                  <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+                  <SelectItem value="South Africa">South Africa</SelectItem>
+                  <SelectItem value="Canada">Canada</SelectItem>
+                  <SelectItem value="Malaysia">Malaysia</SelectItem>
+                  <SelectItem value="Zimbabwe">Zimbabwe</SelectItem>
+                  <SelectItem value="Singhapore">Singhapore</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -177,7 +403,6 @@ export default function BillingDetails() {
               <Label htmlFor="streetAddress">Street address</Label>
               <Input
                 id="streetAddress"
-                required
                 className="w-full"
                 value={address}
                 onChange={(e) => {
@@ -189,7 +414,6 @@ export default function BillingDetails() {
               <Label htmlFor="city">Town / City</Label>
               <Input
                 id="city"
-                required
                 className="w-full"
                 value={city}
                 onChange={(e) => {
@@ -199,28 +423,19 @@ export default function BillingDetails() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="province">Province</Label>
-              <Select
+              <Input
+                id="province"
+                className="w-full"
                 value={province}
-                onValueChange={(value) => {
-                  setProvince(value);
+                onChange={(e) => {
+                  setProvince(e.target.value);
                 }}
-              >
-                <SelectTrigger id="province" className="w-full">
-                  <SelectValue placeholder="Select province" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="sindh">Sindh</SelectItem>
-                  <SelectItem value="punjab">Punjab</SelectItem>
-                  <SelectItem value="balochistan">Balochistan</SelectItem>
-                  <SelectItem value="kpk">Khyber Pakhtunkhwa</SelectItem>
-                </SelectContent>
-              </Select>
+              />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="zipCode">ZIP code</Label>
               <Input
                 id="zipCode"
-                required
                 className="w-full"
                 value={zipCode}
                 onChange={(e) => {
@@ -233,7 +448,6 @@ export default function BillingDetails() {
               <Input
                 id="phone"
                 type="tel"
-                required
                 className="w-full"
                 value={phone}
                 onChange={(e) => {
@@ -246,7 +460,6 @@ export default function BillingDetails() {
               <Input
                 id="email"
                 type="email"
-                required
                 className="w-full"
                 value={email}
                 onChange={(e) => {
@@ -329,7 +542,8 @@ export default function BillingDetails() {
                 </div>
               </div>
             ))}
-
+            <hr />
+            <br />
             <div className="mb-2 flex flex-wrap justify-between pb-2 text-xs sm:text-sm">
               <span className="font-bold">Subtotal</span>
               <span className="font-semibold text-xs sm:text-sm">

@@ -1,5 +1,6 @@
 import { groq } from "next-sanity";
 import sanityClient from "./sanity.client";
+import { useSession } from "next-auth/react";
 
 export async function getProducts() {
     return sanityClient.fetch(
@@ -65,3 +66,18 @@ export async function getOrders() {
     )
 }
 
+export async function getCustomerData(userEmail: any) {
+    return sanityClient.fetch(
+        groq`
+        *[_type == "customer" && email == $email][0] {
+        _id,
+        name,
+        email,
+        image,
+        "orders": orders[]->{firstName, lastName, total, orderStatus, orderDate, orderNumber, cartItem[]->{title, price, _id}},
+        }`,
+        { email: userEmail } // Query ke liye email pass ho rahi hai
+    );
+}
+
+ 
