@@ -19,6 +19,7 @@ import sanityClient from "@/sanity/sanity.client";
 import { useRouter } from "next/navigation";
 import { nanoid } from "nanoid";
 import { useSession } from "next-auth/react";
+
 export default function BillingDetails() {
   const router = useRouter();
   const { data: session, status } = useSession();
@@ -89,7 +90,7 @@ export default function BillingDetails() {
     }
 
     // Check if the customer exists
-    let existingCustomer = await sanityClient.fetch(
+    const existingCustomer = await sanityClient.fetch(
       `*[_type == "customer" && email == $email][0]`,
       { email: session?.user?.email }
     );
@@ -203,7 +204,6 @@ export default function BillingDetails() {
     }
   };
 
-  //   e.preventDefault();
   //   if (!formValid) {
   //     await Swal.fire({
   //       title: "Error",

@@ -1,6 +1,5 @@
 import { groq } from "next-sanity";
 import sanityClient from "./sanity.client";
-import { useSession } from "next-auth/react";
 
 export async function getProducts() {
     return sanityClient.fetch(
